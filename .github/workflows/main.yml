@@ -33,5 +33,5 @@ jobs:
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm repo update
-          helm upgrade --install postgresql bitnami/postgresql  --set image.tag=${{ env.POSTGRES_VERSION || '15.5.0' }} --values values.yaml
+          helm install postgresql bitnami/postgresql  --values values.yaml
     
