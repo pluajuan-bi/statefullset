@@ -1,31 +1,57 @@
-image:
-  repository: postgres
-  pullPolicy: IfNotPresent
+serviceAccount:
+  create: false
+  # Usará el ServiceAccount "default" del namespace
+
+auth:
+  enablePostgresUser: true
+  postgresPassword: "Pichincha1"
+  username: "pluaj"
+  password: "Pichincha1"
+  database: "dbUsuarios"
+
+architecture: standalone
+
+primary:
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: 5Gi
+    accessModes:
+      - ReadWriteOnce
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "1000m"
+  
+  containerSecurityContext:
+    enabled: false
+  
+  podSecurityContext:
+    enabled: false
+  
+  service:
+    type: ClusterIP
+    ports:
+      postgresql: 5432
+  
+  podAnnotations:
+    openshift.io/scc: restricted-v2
+
+volumePermissions:
+  enabled: false
+
+shmVolume:
+  enabled: false
 
 postgresql:
-  username: pluaj
-  password: Pichincha1
-  database: dbUsuario
+  maxConnections: "100"
+  sharedBuffers: "128MB"
 
-service:
-  type: ClusterIP
-  port: 5432
+metrics:
+  enabled: false
 
-persistence:
-  enabled: true
-  size: 5Gi
-  storageClass: ""
-  accessModes:
-    - ReadWriteOnce
-
-resources:
-  requests:
-    memory: "256Mi"
-    cpu: "250m"
-  limits:
-    memory: "512Mi"
-    cpu: "500m"
-
-securityContext:
-  runAsUser: 999
-  runAsGroup: 999
+diagnosticMode:
+  enabled: false

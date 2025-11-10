@@ -4,18 +4,15 @@ on:
   push:
     branches: ["main"]
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Install OC CLI
         run: |
-          curl -L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz | tar xz
+          curl -L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz | tar xz          
           sudo mv oc /usr/local/bin/
           oc version
 
@@ -23,27 +20,22 @@ jobs:
         uses: azure/setup-helm@v3
         with:
           version: v3.12.0
-
-      - name: Login OpenShift
+      - name: Login in Openshift
         uses: redhat-actions/oc-login@v1
         with:
           openshift_server_url: https://api.rm3.7wse.p1.openshiftapps.com:6443
           openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
-
       - name: Validate Namespace Context
         run: |
           echo "Validando contexto en namespace pluaj-dev-dev"
           oc project pluaj-dev-dev
-
-      - name: Deploy PostgreSQL from Bitnami using Quay
+      - name: Deploy Base PostgreSQL via Helm
         run: |
-          echo "----- Agregando repositorio Bitnami -----"
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm repo update
-
-          echo "----- Desplegando con Helm usando Quay.io -----"
           helm upgrade --install openshift-db-postgresql bitnami/postgresql \
-            --set image.registry=quay.io \
-            --set image.repository=bitnami/postgresql \
-            --namespace pluaj-dev-dev \
-            --values values.yaml
+          --version 18.1.8 \
+          --values values.yaml \
+          --namespace pluaj-dev-dev \
+
+    
