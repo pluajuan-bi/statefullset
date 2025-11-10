@@ -34,7 +34,7 @@ jobs:
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm repo update
           helm upgrade --install openshift-db-postgresql bitnami/postgresql \
-          --version 18.1.8 \
+          --version 17.6 \
           --values values.yaml \
           --namespace pluaj-dev-dev \
           --atomic --wait
