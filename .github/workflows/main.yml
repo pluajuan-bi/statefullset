@@ -33,5 +33,9 @@ jobs:
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm repo update
-          helm install postgresql bitnami/postgresql  --values values.yaml
+          helm upgrade --install openshift-db-postgresql bitnami/postgresql \
+          --values values.yaml \
+          --namespace pluaj-dev-dev \
+          --atomic --wait
+
     
