@@ -1,6 +1,5 @@
 serviceAccount:
   create: false
-  # Usará el ServiceAccount "default" del namespace
 
 auth:
   enablePostgresUser: true
@@ -10,7 +9,6 @@ auth:
   database: "dbUsuarios"
 
 architecture: standalone
-
 primary:
   persistence:
     enabled: true
@@ -25,33 +23,9 @@ primary:
     limits:
       memory: "1Gi"
       cpu: "1000m"
-  
-  containerSecurityContext:
-    enabled: false
-  
-  podSecurityContext:
-    enabled: false
-  
   service:
     type: ClusterIP
     ports:
       postgresql: 5432
-  
-  podAnnotations:
-    openshift.io/scc: restricted-v2
-
-volumePermissions:
-  enabled: false
-
-shmVolume:
-  enabled: false
-
-postgresql:
-  maxConnections: "100"
-  sharedBuffers: "128MB"
-
 metrics:
-  enabled: false
-
-diagnosticMode:
   enabled: false
